@@ -13,11 +13,13 @@
     console.log(nameID);
 
     //loop through and append to the dropdown
-    nameID.forEach((item) => {
+    nameID.forEach((item) => 
+    {
         //append each to the dropdown
         dropdown.append("option").text(item);
+    });
     
-     //*********************************************************** */ 
+     /*********************************************************** */ 
      //capture change in the dropdown menu 
      dropdown.on("change", function(event){
          var selectID = dropdown.property("value");
@@ -27,15 +29,15 @@
         //create an array for the top 10
         var top10_IDs = [];
         selectData[0].otu_ids.slice(0,10).forEach(item => {
-            var substring = top10.push(`"OTU ${item}`)
+            var substring = top10_IDs.push(`OTU ${item}`)
         });
 
-        console.log(top10)
+        console.log(top10_IDs)
 
         var top10_sample_values = selectData[0].sample_values.slice(0,10);
         var top10_otu_label = selectData[0].otu_labels.slice(0,10);
-
-     });
+        console.log(top10_sample_values)
+     
      /************************************************************* */
      //plot the bar chart
      var barData =
@@ -52,7 +54,38 @@
      { yaxis:{autorange: 'reversed'}};
 
      Plotly.newPlot('bar',barData, barLayout)
+     /*************************************************************** */
+     //plot the bubble chart
+     var otuID = selectData[0].otu_ids;
+     console.log(otuID);
+
+     var bubbleData = 
+        [{
+            x: otuID,
+            y: top10_sample_values,
+            mode: 'markers',
+            text: top10_otu_label,
+            marker: 
+            {
+              size: top10_sample_values,
+              color: otuID,
+              colorscale: [[0, 'rgb(204, 15, 170)'], [1, 'rgb(204, 240, 170)']]
+            }
+        }];
+          
+        var bubbleLayout = 
+          {
+            showlegend: false,
+            height: 600,
+            width: 1200,
+            xaxis: {title: 'OTU ID'},
+            opacity: 0.6
+          };
+          
+        Plotly.newPlot('bubble',bubbleData, bubbleLayout);
     });
+
+
  });
 
 
