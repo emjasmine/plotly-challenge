@@ -1,6 +1,6 @@
 //Use the D3 library to read in samples.json.
- d3.json('../../../data/samples.json').then(function(d){
-     var sampleData = d;
+ d3.json('../../../data/samples.json').then(function(data){
+     var sampleData = data;
      console.log(sampleData);
 
      //********************************************************* */
@@ -16,6 +16,7 @@
     nameID.forEach((item) => {
         //append each to the dropdown
         dropdown.append("option").text(item);
+    
      //*********************************************************** */ 
      //capture change in the dropdown menu 
      dropdown.on("change", function(event){
@@ -23,22 +24,35 @@
          var selectData = sampleData[0].samples.filter(item => item.id === selectID);
          console.log(selectData);
 
-        //create an array to capture specifics with the sorted data
-        var sampleList = [];
-
-        //pull out the sample values
-        var sampleValues = selectData[0].sample_values
-
-        //sort the sample values
-        sampleValues.sort(function compareFunction(firstNum, secondNum) {
-            // 
-            return secondNum - firstNum;
+        //create an array for the top 10
+        var top10_IDs = [];
+        selectData[0].otu_ids.slice(0,10).forEach(item => {
+            var substring = top10.push(`"OTU ${item}`)
         });
-        console.log(sampleValues)
-     });
 
+        console.log(top10)
+
+        var top10_sample_values = selectData[0].sample_values.slice(0,10);
+        var top10_otu_label = selectData[0].otu_labels.slice(0,10);
+
+     });
+     /************************************************************* */
+     //plot the bar chart
+     var barData =
+     [{
+         type: 'bar',
+         x: top10_sample_values,
+         y: top10_IDs,
+         orientation: 'h',
+         text: top10_otu_label,
+         mode: 'markers'
+     }]
+
+     var barLayout =
+     { yaxis:{autorange: 'reversed'}};
+
+     Plotly.newPlot('bar',barData, barLayout)
     });
-    
  });
 
 
