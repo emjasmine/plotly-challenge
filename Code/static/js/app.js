@@ -83,7 +83,35 @@
           };
           
         Plotly.newPlot('bubble',bubbleData, bubbleLayout);
+    /************************************************************************* */
+    //select the demographic box
+    var metaTable = d3.select("#sample-metadata");
+
+    // clear the table 
+    metaTable.text("");
+    
+    //pull just the meta Data from the full data set (sampleData)
+    var metaData = sampleData[0].metadata.filter(item => item.id === parseInt(selectID));
+    console.log(metaData)
+
+    // Append paragraph tags to the demographic info box
+    metaTable.append('p').text(`id: ${metaData[0].id}`);
+    metaTable.append('p').text(`ethnicity: ${metaData[0].ethnicity}`);
+    metaTable.append('p').text(`gender: ${metaData[0].gender}`);
+    metaTable.append('p').text(`age: ${metaData[0].age}`);
+    metaTable.append('p').text(`location: ${metaData[0].location}`);
+    metaTable.append('p').text(`bbtype: ${metaData[0].bbtype}`);
+    metaTable.append('p').text(`wfreq: ${metaData[0].wfreq}`);
+    /************************************************************** */
+    //Bonus: select the gauge id
+    var gaugeID = d3.select("#gauge")
+
+    //pull the wash frequency data from the metadata set
+    var wash_freq = metaData[0].wfreq;
+    console.log (wash_freq);
     });
+    
+
 
 
  });
